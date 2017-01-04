@@ -1,8 +1,8 @@
 ############################################
-###   Tooploox: recruitment exercise
+###   TP: recruitment exercise
 #
 #
-# Author:     Damian Gwozdz
+# Author:     DG
 # Date:       29DEC2016
 # Mod. date:  -
 # Input data: data.csv
