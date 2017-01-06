@@ -167,7 +167,19 @@ for(i in 1:24){
 }
 mRSE.multiple.vars <- pred.mRSE(pred.multiple.vars, "ln.V168", data.train, data.test)
 
-cbind(mRSE.single.var, mRSE.multiple.vars)
+# Preparing data for ggplot2
+
+mRSE.compare <- cbind(index = seq_along(mRSE.single.var), mRSE.single.var, 
+                      mRSE.multiple.vars) %>%
+  data.frame %>%
+  melt(id = "index")
+
+# Adding labels for data for ggplot2
+
+mRSE.compare[,2] <- ifelse(mRSE.compare[,2] == "mRSE.single.var",
+                           "Linear Regression",
+                           "Multiple-input Linear Regression")
+
 
 # (1.10) Plot the mRSE
 
@@ -181,3 +193,16 @@ legend("topright", "(x,y)",
        lty = c(2, 1),
        col = c("black", "green"),
        bg = "white")
+
+# Alternative plot in ggplot2
+
+ggplot(mRSE.compare, aes(x = index, y = value, colour = variable)) + 
+      geom_line(size = 1.2) +
+      geom_point() +
+      xlab("Reference time (n)") +
+      ylab("mRSE") +
+      ggtitle("Performance of linear regression models for n in <1: 24> hours
+  measured as mean Relative Squared Error (mRSE)") +
+      theme_minimal() +
+  labs(fill="Serologic response")
+
