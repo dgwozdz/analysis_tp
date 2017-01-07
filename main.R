@@ -41,19 +41,18 @@ qplot(apply(data.videos[,2:ncol(data.videos)], 1, mean), geom = "histogram")
 
 names(data.videos) <- c("id", paste0("V", 1:168))
 
-##### (1) Distribution of V(168), basic stats for v({24, 72, 168})----
-
-# (1.1) Basic stats for v(24), v(72), v(168)
+# (1.1) Basic stats for v(24), v(72), v(168)----
 
 summary(data.videos[, c("V24", "V72", "V168")])
 boxplot(data.videos[, c("V24", "V72", "V168")])
 boxplot(data.videos[, c("V24")])
 
-# (1.2) Distribution of v(168)
+# (1.2) Distribution of v(168)----
 
-qplot(data.videos[, "V168"])
+qplot(data.videos[, "V168"]) # It reminds Weibull distribution?
+plot(ecdf(data.videos[, "V168"]))
 
-# (1.3) Distribution of v(168)
+# (1.3) Distribution of v(168)----
 
 qplot(log(data.videos[, "V168"]))
 ad.test(log(data.videos[, "V168"]))
@@ -64,7 +63,7 @@ mean(log(data.videos[, "V168"]))
 # and Anderson Darling test suggest rejection of null hypothesis of the data 
 # being distributed normally.
 
-# (1.4) Outliers of v(168)
+# (1.4) Outliers of v(168)----
 
 data.videos$ln.V168 <- log(data.videos$V168)
 mean.ln.V168 <- mean(data.videos$ln.V168)
@@ -77,7 +76,7 @@ high.3sigma <- mean.ln.V168+sd.ln.V168*3
 data.videos <- data.videos[data.videos$ln.V168>=low.3sigma &
                              data.videos$ln.V168<=high.3sigma,]
 
-# (1.5) Correlation between log-transformed v(1:24) and log-transformed v(168)
+# (1.5) Correlation between log-transformed v(1:24) and log-transformed v(168)----
 
 for(i in 1:24){
   
@@ -100,13 +99,13 @@ log.cor <- cor(data.videos[, c(paste0("ln.V", c(1:24, 168)))])
 corrplot.mixed(log.cor, lower = "pie", upper = "number", tl.pos = "lt", 
                tl.cex = 1, number.cex=0.7)
 
-# (1.6) Split
+# (1.6) Split----
 
 split.vec <- sample(1:nrow(data.videos), size = floor(0.9*nrow(data.videos)))
 data.train <- data.videos[split.vec,]
 data.test <- data.videos[-split.vec,]
 
-# (1.7-9) OLS, multiple-input OLS & evaluation of predictors
+# (1.7-9) OLS, multiple-input OLS & evaluation of predictors----
 
 pred.mRSE <- function(vars, target, train, test){
   
@@ -203,8 +202,9 @@ which(mRSE.multiple.vars$RMSE.train == min(mRSE.multiple.vars$RMSE.train)) # == 
 
 # Preparing data for ggplot2 - melting in order to plot multiple lines on one plot
 
-mRSE.compare <- cbind(index = seq_along(mRSE.single.var), mRSE.single.var, 
-                      mRSE.multiple.vars) %>%
+mRSE.compare <- cbind(index = seq_along(mRSE.single.var$mRSE.test),
+                      mRSE.single.var = mRSE.single.var$mRSE.test, 
+                      mRSE.multiple.vars = mRSE.multiple.vars$mRSE.test) %>%
   data.frame %>%
   melt(id = "index")
 
