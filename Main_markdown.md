@@ -1,3 +1,6 @@
+---
+output: html_document
+---
 #### TP: recruitment exercise
 * Author:           DG
 * Date:             29DEC2016

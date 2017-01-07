@@ -129,7 +129,18 @@ $(document).ready(function () {
 </div>
 <div id="reading-packages-setting-working-directory" class="section level2">
 <h2>0. Reading packages, setting working directory</h2>
+<pre class="r"><code>set.seed(1234567)
+rm(list = ls())
+if (!require(&quot;pacman&quot;)) install.packages(&quot;pacman&quot;)</code></pre>
 <pre><code>## Loading required package: pacman</code></pre>
+<pre class="r"><code>pacman::p_load(data.table, dplyr, ggplot2, caret, nortest, corrplot)
+
+library(data.table)
+library(dplyr)
+library(ggplot2)
+library(caret)
+library(nortest) # Anderson-Darling test for normality
+library(corrplot)</code></pre>
 </div>
 <div id="reading-data" class="section level2">
 <h2>1. Reading data</h2>
