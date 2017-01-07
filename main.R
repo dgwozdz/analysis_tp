@@ -226,5 +226,4 @@ ggplot(mRSE.compare, aes(x = index, y = value, colour = variable)) +
   ggtitle("Performance of linear regression models for n in <1: 24> hours
   measured as mean Relative Squared Error (mRSE)") +
   theme_minimal() +
-  theme(legend.position = "bottom", legend.title=element_blank()) +
-  labs(fill="Serologic response")
+  theme(legend.position = "bottom", legend.title=element_blank())
