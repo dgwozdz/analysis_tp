@@ -94,22 +94,19 @@ Taking a closer look at the means for video views it can be seen that after 72 h
 on average a given videos has 62% (=743210/613303 - 1) more views than after 24 hours
 and 2 times more views after 168 hours. It can be also read that the increase in
 views between 3 and 7 days after publishing is on average at level ~20%
-(=743210/613303 - 1). Last but not least, more outliers are identified with the time
+(=743210/613303 - 1). Last but not least, more outliers were identified with the time
 passing from the sharing of videos.
 
 ### 1.2 Distribution of v(168)
 
 
 ```r
-qplot(data.videos[, "V168"], main = "Histogram for V168")
-```
-
-```
-## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+qplot(data.videos[, "V168"], main = "Histogram for V168", bins = 30)
 ```
 <p align="center">
 	<img src="README_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" />
 </p>
+	
 ```r
 plot(ecdf(data.videos[, "V168"]), main = "Cumulative distribution function for V168")
 ```
@@ -122,12 +119,10 @@ The distribution reminds some kind of Weibull distribution?
 
 
 ```r
-qplot(log(data.videos[, "V168"]), main = "Histogram of log-transformed V168")
+qplot(log(data.videos[, "V168"]), main = "Histogram of log-transformed V168",
+      bins = 30)
 ```
 
-```
-## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
-```
 <p align="center">
 	<img src="README_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" />
 </p>
@@ -197,16 +192,14 @@ for(i in 1:24){
                                              mean(data.videos$ln.V1[data.videos$ln.V1 != -Inf]),
                                              data.videos[[paste0("ln.V", i)]])
 }
-
 log.cor <- cor(data.videos[, c(paste0("ln.V", c(1:24, 168)))])
-
 corrplot.mixed(log.cor, lower = "pie", upper = "number", tl.pos = "lt", 
-               tl.cex = 1, number.cex=0.4, pch.cex = 5)
+               tl.cex = 1, number.cex = 0.6, pch.cex = 5, cl.cex = 1/par("cex"))
 ```
 <p align="center">
 	<img src="README_files/figure-html/unnamed-chunk-13-1.png" style="display: block; margin: auto;" />
 </p>
-	
+
 ### 1.6 Split
 
 Spitting data into training (90%) and test (10%) sets:
