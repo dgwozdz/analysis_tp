@@ -219,17 +219,17 @@ mRSE.single.var <- pred.mRSE(vars = pred.single.var,
 mRSE.single.var$mRSE.test
 ```
 
-The model which minimizes mRSE is the 
+The model which minimized mRSE on the test set was the 
 `r which(mRSE.single.var$mRSE.test == min(mRSE.single.var$mRSE.test))`th one, so it 
-is the one with log-transformed V24
+was the one with log-transformed V24.
 
 ```{r eval  = T}
 mRSE.single.var$RMSE.train
 ```
 
-The model which minimizes mRSE is the
+The model which minimized RMSE on the training set was the
 `r which(mRSE.single.var$RMSE.train == min(mRSE.single.var$RMSE.train))`th one, so it 
-is the one with log-transformed V24
+also wasis the one with log-transformed V24.
 
 Prediction for models with multiple regresors:
 
@@ -248,7 +248,7 @@ mRSE.multiple.vars <- pred.mRSE(vars = pred.multiple.vars,
 mRSE.multiple.vars$mRSE.test
 ```
 
-Model resulted in minimum mRSE was the 
+The model which resulted in minimum mRSE on the test set was the 
 `r which(mRSE.multiple.vars$mRSE.test == min(mRSE.multiple.vars$mRSE.test))`th one,
 therefore it contained all log-transformed 24 variables.
 
@@ -256,7 +256,7 @@ therefore it contained all log-transformed 24 variables.
 mRSE.multiple.vars$RMSE.train
 ```
 
-Model resulted in minimum RMSE was the 
+The model which resulted in minimum RMSE on the training set was the 
 `r which(mRSE.multiple.vars$RMSE.train == min(mRSE.multiple.vars$RMSE.train))`th one,
 therefore it also contained all log-transformed 24 variables.
 
