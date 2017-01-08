@@ -15,7 +15,7 @@ set.seed(1234567)
 rm(list = ls())
 
 if (!require("pacman")) install.packages("pacman")
-pacman::p_load(data.table, dplyr, ggplot2, caret, nortest, corrplot)
+pacman::p_load(data.table, dplyr, ggplot2, caret, nortest, corrplot, moments)
 
 library(data.table)
 library(dplyr)
@@ -23,6 +23,7 @@ library(ggplot2)
 library(caret)
 library(nortest) # Anderson-Darling test for normality
 library(corrplot)
+library(moments) # skewness
 
 wd <- "F:\\Damian\\Praca\\2016\\Toolplox Data Scientist\\Tooploox_Data_Scientist_Exercise (1)\\Tooploox_Data_Scientist_Exercise"
 setwd(wd)
@@ -59,15 +60,19 @@ plot(ecdf(data.videos[, "V168"]))
 
 # (1.3) Distribution of v(168)----
 
-qplot(log(data.videos[, "V168"]))
+qplot(log(data.videos[, "V168"]), geom = "blank",
+      main = "Histogram of log-transformed V168") +   
+  geom_line(aes(y = ..density.., colour = I("red")), stat = "density", size = 1) +
+  geom_histogram(aes(y = ..density..), alpha = 0.4, bins = 30)
+
 ad.test(log(data.videos[, "V168"]))
 shapiro.test(log(data.videos[, "V168"]))
-ks.test(log(data.videos[, "V168"]), "pnorm")
-mean(log(data.videos[, "V168"]))
 
 # The distribution looks a bit similar to the normal one, however both Shapiro
 # and Anderson Darling test suggest rejection of null hypothesis of the data 
 # being distributed normally.
+
+skewness(log(data.videos[, "V168"])) # skewed to the right
 
 # (1.4) Outliers of v(168)----
 

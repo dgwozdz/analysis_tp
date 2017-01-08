@@ -11,7 +11,7 @@
 set.seed(1234567)
 rm(list = ls())
 if (!require("pacman")) install.packages("pacman")
-pacman::p_load(data.table, dplyr, ggplot2, caret, nortest, corrplot)
+pacman::p_load(data.table, dplyr, ggplot2, caret, nortest, corrplot, moments)
 
 library(data.table)
 library(dplyr)
@@ -19,6 +19,7 @@ library(ggplot2)
 library(caret)
 library(nortest) # Anderson-Darling test for normality
 library(corrplot)
+library(moments) # skewness
 ```
 
 ## 1. Reading data
@@ -106,7 +107,7 @@ qplot(data.videos[, "V168"], main = "Histogram for V168", bins = 30)
 <p align="center">
 	<img src="README_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" />
 </p>
-	
+
 ```r
 plot(ecdf(data.videos[, "V168"]), main = "Cumulative distribution function for V168")
 ```
@@ -119,10 +120,11 @@ The distribution reminds some kind of Weibull distribution?
 
 
 ```r
-qplot(log(data.videos[, "V168"]), main = "Histogram of log-transformed V168",
-      bins = 30)
+qplot(log(data.videos[, "V168"]), geom = "blank",
+  main = "Histogram of log-transformed V168") +   
+  geom_line(aes(y = ..density.., colour = I("red")), stat = "density", size = 1) +
+  geom_histogram(aes(y = ..density..), alpha = 0.4, bins = 30) 
 ```
-
 <p align="center">
 	<img src="README_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" />
 </p>
@@ -150,10 +152,11 @@ shapiro.test(log(data.videos[, "V168"]))
 ## data:  log(data.videos[, "V168"])
 ## W = 0.92821, p-value < 2.2e-16
 ```
-
 The distribution looks a bit similar to the normal one, however both Shapiro
 and Anderson-Darling test suggest rejection of null hypothesis of the data 
-being distributed normally.
+being distributed normally. The skewness at level
+1.1599781 suggests that the distribution is skewed to
+the right.
 
 ### 1.4 Outliers of v(168)
 
@@ -196,6 +199,7 @@ log.cor <- cor(data.videos[, c(paste0("ln.V", c(1:24, 168)))])
 corrplot.mixed(log.cor, lower = "pie", upper = "number", tl.pos = "lt", 
                tl.cex = 1, number.cex = 0.6, pch.cex = 5, cl.cex = 1/par("cex"))
 ```
+
 <p align="center">
 	<img src="README_files/figure-html/unnamed-chunk-13-1.png" style="display: block; margin: auto;" />
 </p>
