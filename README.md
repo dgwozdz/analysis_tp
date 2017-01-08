@@ -87,8 +87,9 @@ summary(data.videos[, c("V24", "V72", "V168")])
 ```r
 boxplot(data.videos[, c("V24", "V72", "V168")])
 ```
-
-<img src="README_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" />
+<p align="center">
+	<img src="README_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" />
+</p>
 Taking a closer look at the means for video views it can be seen that after 72 hours
 on average a given videos has 62% (=743210/613303 - 1) more views than after 24 hours
 and 2 times more views after 168 hours. It can be also read that the increase in
@@ -106,14 +107,15 @@ qplot(data.videos[, "V168"], main = "Histogram for V168")
 ```
 ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 ```
-
-<img src="README_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" />
-
+<p align="center">
+	<img src="README_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" />
+</p>
 ```r
 plot(ecdf(data.videos[, "V168"]), main = "Cumulative distribution function for V168")
 ```
-
-<img src="README_files/figure-html/unnamed-chunk-7-2.png" style="display: block; margin: auto;" />
+<p align="center">
+	<img src="README_files/figure-html/unnamed-chunk-7-2.png" style="display: block; margin: auto;" />
+</p>
 The distribution reminds some kind of Weibull distribution?
 
 ### 1.3 Distribution of log-transformed v(168)
@@ -126,8 +128,9 @@ qplot(log(data.videos[, "V168"]), main = "Histogram of log-transformed V168")
 ```
 ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 ```
-
-<img src="README_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" />
+<p align="center">
+	<img src="README_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" />
+</p>
 
 ```r
 ad.test(log(data.videos[, "V168"]))
@@ -200,9 +203,10 @@ log.cor <- cor(data.videos[, c(paste0("ln.V", c(1:24, 168)))])
 corrplot.mixed(log.cor, lower = "pie", upper = "number", tl.pos = "lt", 
                tl.cex = 1, number.cex=0.4, pch.cex = 5)
 ```
-
-<img src="README_files/figure-html/unnamed-chunk-13-1.png" style="display: block; margin: auto;" />
-
+<p align="center">
+	<img src="README_files/figure-html/unnamed-chunk-13-1.png" style="display: block; margin: auto;" />
+</p>
+	
 ### 1.6 Split
 
 Spitting data into training (90%) and test (10%) sets:
@@ -378,5 +382,6 @@ ggplot(mRSE.compare, aes(x = index, y = value, colour = variable)) +
   theme_minimal() +
   theme(legend.position = "bottom", legend.title=element_blank())
 ```
-
-<img src="README_files/figure-html/unnamed-chunk-23-1.png" style="display: block; margin: auto;" />
+<p align="center">
+	<img src="README_files/figure-html/unnamed-chunk-23-1.png" style="display: block; margin: auto;" />
+</p>
