@@ -45,7 +45,12 @@ names(data.videos) <- c("id", paste0("V", 1:168))
 
 summary(data.videos[, c("V24", "V72", "V168")])
 boxplot(data.videos[, c("V24", "V72", "V168")])
-boxplot(data.videos[, c("V24")])
+# Taking a closer look at the means for video views it can be seen that after 72 hours
+# on average a given videos has 62% (=743210/613303 - 1) more views than after 24 hours
+# and 2 times more views after 168 hours. It can be also read that the increase in
+# views between 3 and 7 days after publishing is on average at level ~20%
+# (=743210/613303 - 1). Last but not least, more outliers are identified with the time
+# passing from the sharing of videos.
 
 # (1.2) Distribution of v(168)----
 
@@ -57,6 +62,7 @@ plot(ecdf(data.videos[, "V168"]))
 qplot(log(data.videos[, "V168"]))
 ad.test(log(data.videos[, "V168"]))
 shapiro.test(log(data.videos[, "V168"]))
+ks.test(log(data.videos[, "V168"]), "pnorm")
 mean(log(data.videos[, "V168"]))
 
 # The distribution looks a bit similar to the normal one, however both Shapiro

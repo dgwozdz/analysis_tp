@@ -6,7 +6,7 @@ output:
 #### TP: recruitment exercise
 * Author:           DG
 * Date:             29DEC2016
-* Last  mod. date:  07JAN2017
+* Last  mod. date:  08JAN2017
 * Input data:       data.csv
 
 ## 0. Reading packages, setting working directory
@@ -26,6 +26,7 @@ library(corrplot)
 ```
 
 ## 1. Reading data
+
 ```{r eval = T}
 # setting working directory...
 
@@ -50,37 +51,42 @@ dim(data.videos) # Number of rows & columns
 sum(is.na(data.videos)) # checking if there are any missing values
 ```
 
-Naming variables properly: id and the number of views after i-th hour
+Naming variables properly: id and the number of views after i-th hour.
 ```{r eval = T}
 names(data.videos) <- c("id", paste0("V", 1:168))
 ```
 
 ### 1.1 Basic stats for v(24), v(72), v(168)
 
-```{r eval = T}
+```{r eval = T, fig.align = "center"}
 summary(data.videos[, c("V24", "V72", "V168")])
 boxplot(data.videos[, c("V24", "V72", "V168")])
-boxplot(data.videos[, c("V24")])
 ```
+Taking a closer look at the means for video views it can be seen that after 72 hours
+on average a given videos has 62% (=743210/613303 - 1) more views than after 24 hours
+and 2 times more views after 168 hours. It can be also read that the increase in
+views between 3 and 7 days after publishing is on average at level ~20%
+(=743210/613303 - 1). Last but not least, more outliers are identified with the time
+passing from the sharing of videos.
 
 ### 1.2 Distribution of v(168)
 
-```{r eval = T}
-qplot(data.videos[, "V168"])
-plot(ecdf(data.videos[, "V168"]))
+```{r eval = T, fig.align = "center"}
+qplot(data.videos[, "V168"], main = "Histogram for V168")
+plot(ecdf(data.videos[, "V168"]), main = "Cumulative distribution function for V168")
 ```
 The distribution reminds some kind of Weibull distribution?
 
 ### 1.3 Distribution of log-transformed v(168)
 
-```{r eval = T}
-qplot(log(data.videos[, "V168"]))
+```{r eval = T, fig.align = "center"}
+qplot(log(data.videos[, "V168"]), main = "Histogram of log-transformed V168")
 ad.test(log(data.videos[, "V168"]))
 shapiro.test(log(data.videos[, "V168"]))
 ```
 
 The distribution looks a bit similar to the normal one, however both Shapiro
-and Anderson Darling test suggest rejection of null hypothesis of the data 
+and Anderson-Darling test suggest rejection of null hypothesis of the data 
 being distributed normally.
 
 ### 1.4 Outliers of v(168)
@@ -95,7 +101,7 @@ high.3sigma <- mean.ln.V168+sd.ln.V168*3
 ```{r eval = T, echo = F}
 nrow.before <- nrow(data.videos)
 ```
-Removing outliers
+Removing outliers:
 ```{r eval = T}
 data.videos <- data.videos[data.videos$ln.V168>=low.3sigma &
                              data.videos$ln.V168<=high.3sigma,]
@@ -107,7 +113,7 @@ As a result of outlier removal process, `r nrow.before-nrow.after` observations 
 
 ### 1.5 Correlations between log-transformed v(1:24) and log-transformed v(168)
 
-```{r eval = T}
+```{r eval = T, fig.align = "center"}
 for(i in 1:24){
   
   # Adding log-transformed V1-V24
@@ -220,7 +226,7 @@ mRSE.single.var$RMSE.train
 ```
 
 The model which minimizes mRSE is the
-` rwhich(mRSE.single.var$RMSE.train == min(mRSE.single.var$RMSE.train))``th one, so it 
+`r which(mRSE.single.var$RMSE.train == min(mRSE.single.var$RMSE.train))`th one, so it 
 is the one with log-transformed V24
 
 Prediction for models with multiple regresors:
@@ -277,7 +283,7 @@ head(mRSE.compare) # checking the first 6 observations
 
 Plot in ggplot2:
 
-```{r eval = T}
+```{r eval = T, fig.align = "center"}
 ggplot(mRSE.compare, aes(x = index, y = value, colour = variable)) + 
   geom_line(size = 1.2) +
   geom_point() +

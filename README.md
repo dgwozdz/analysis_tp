@@ -11,6 +11,13 @@
 set.seed(1234567)
 rm(list = ls())
 if (!require("pacman")) install.packages("pacman")
+```
+
+```
+## Loading required package: pacman
+```
+
+```r
 pacman::p_load(data.table, dplyr, ggplot2, caret, nortest, corrplot)
 
 library(data.table)
@@ -22,6 +29,7 @@ library(corrplot)
 ```
 
 ## 1. Reading data
+
 
 ```r
 # setting working directory...
@@ -60,7 +68,7 @@ sum(is.na(data.videos)) # checking if there are any missing values
 ## [1] 0
 ```
 
-Naming variables properly: id and the number of views after i-th hour
+Naming variables properly: id and the number of views after i-th hour.
 
 ```r
 names(data.videos) <- c("id", paste0("V", 1:168))
@@ -87,46 +95,46 @@ summary(data.videos[, c("V24", "V72", "V168")])
 boxplot(data.videos[, c("V24", "V72", "V168")])
 ```
 
-![](README_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
-
-```r
-boxplot(data.videos[, c("V24")])
-```
-
-![](README_files/figure-html/unnamed-chunk-6-2.png)<!-- -->
+<img src="README_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" />
+Taking a closer look at the means for video views it can be seen that after 72 hours
+on average a given videos has 62% (=743210/613303 - 1) more views than after 24 hours
+and 2 times more views after 168 hours. It can be also read that the increase in
+views between 3 and 7 days after publishing is on average at level ~20%
+(=743210/613303 - 1). Last but not least, more outliers are identified with the time
+passing from the sharing of videos.
 
 ### 1.2 Distribution of v(168)
 
 
 ```r
-qplot(data.videos[, "V168"])
+qplot(data.videos[, "V168"], main = "Histogram for V168")
 ```
 
 ```
 ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 ```
 
-![](README_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
+<img src="README_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" />
 
 ```r
-plot(ecdf(data.videos[, "V168"]))
+plot(ecdf(data.videos[, "V168"]), main = "Cumulative distribution function for V168")
 ```
 
-![](README_files/figure-html/unnamed-chunk-7-2.png)<!-- -->
+<img src="README_files/figure-html/unnamed-chunk-7-2.png" style="display: block; margin: auto;" />
 The distribution reminds some kind of Weibull distribution?
 
 ### 1.3 Distribution of log-transformed v(168)
 
 
 ```r
-qplot(log(data.videos[, "V168"]))
+qplot(log(data.videos[, "V168"]), main = "Histogram of log-transformed V168")
 ```
 
 ```
 ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 ```
 
-![](README_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
+<img src="README_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" />
 
 ```r
 ad.test(log(data.videos[, "V168"]))
@@ -137,7 +145,7 @@ ad.test(log(data.videos[, "V168"]))
 ## 	Anderson-Darling normality test
 ## 
 ## data:  log(data.videos[, "V168"])
-## A = 17.512, p-value < 0.00000000000000022
+## A = 17.512, p-value < 2.2e-16
 ```
 
 ```r
@@ -149,11 +157,11 @@ shapiro.test(log(data.videos[, "V168"]))
 ## 	Shapiro-Wilk normality test
 ## 
 ## data:  log(data.videos[, "V168"])
-## W = 0.92821, p-value < 0.00000000000000022
+## W = 0.92821, p-value < 2.2e-16
 ```
 
 The distribution looks a bit similar to the normal one, however both Shapiro
-and Anderson Darling test suggest rejection of null hypothesis of the data 
+and Anderson-Darling test suggest rejection of null hypothesis of the data 
 being distributed normally.
 
 ### 1.4 Outliers of v(168)
@@ -167,7 +175,7 @@ low.3sigma <- mean.ln.V168-sd.ln.V168*3
 high.3sigma <- mean.ln.V168+sd.ln.V168*3
 ```
 
-Removing outliers
+Removing outliers:
 
 ```r
 data.videos <- data.videos[data.videos$ln.V168>=low.3sigma &
@@ -200,7 +208,7 @@ corrplot.mixed(log.cor, lower = "pie", upper = "number", tl.pos = "lt",
                tl.cex = 1, number.cex=0.4, pch.cex = 5)
 ```
 
-![](README_files/figure-html/unnamed-chunk-13-1.png)<!-- -->
+<img src="README_files/figure-html/unnamed-chunk-13-1.png" style="display: block; margin: auto;" />
 
 ### 1.6 Split
 
@@ -243,11 +251,11 @@ mRSE.single.var$mRSE.test
 ```
 
 ```
-##  [1] 0.0019260952 0.0013794946 0.0012000904 0.0010907072 0.0010055435
-##  [6] 0.0009474114 0.0008789561 0.0008172859 0.0007613822 0.0007130734
-## [11] 0.0006781102 0.0006431790 0.0006191579 0.0005932844 0.0005710734
-## [16] 0.0005490705 0.0005261020 0.0005031134 0.0004750868 0.0004483604
-## [21] 0.0004271759 0.0004079866 0.0003919230 0.0003767827
+##  [1] 0.0068298057 0.0023124753 0.0017890998 0.0015863300 0.0014522931
+##  [6] 0.0013673630 0.0013013972 0.0012069497 0.0010908590 0.0010252535
+## [11] 0.0009869171 0.0009440198 0.0009012966 0.0008546808 0.0008066865
+## [16] 0.0007626109 0.0007155447 0.0006733554 0.0006366968 0.0006012064
+## [21] 0.0005676787 0.0005363355 0.0005060792 0.0004748116
 ```
 
 The model which minimizes mRSE is the 
@@ -260,14 +268,14 @@ mRSE.single.var$RMSE.train
 ```
 
 ```
-##  [1] 0.50453122 0.36319792 0.27592179 0.25067519 0.23017481 0.21036565
-##  [7] 0.19261473 0.17540352 0.16016057 0.14854742 0.13961736 0.13146393
-## [13] 0.12427493 0.11763679 0.11099231 0.10485911 0.09891208 0.09401563
-## [19] 0.08993314 0.08611342 0.08241025 0.07893036 0.07579590 0.07286072
+##  [1] 0.41928326 0.34403177 0.26357309 0.24023410 0.22066449 0.20123536
+##  [7] 0.18329548 0.16663618 0.15254138 0.14118357 0.13226730 0.12427461
+## [13] 0.11750035 0.11136646 0.10532627 0.09972780 0.09435373 0.08993844
+## [19] 0.08610465 0.08252391 0.07912080 0.07592840 0.07310578 0.07052027
 ```
 
 The model which minimizes mRSE is the
-` rwhich(mRSE.single.var$RMSE.train == min(mRSE.single.var$RMSE.train))``th one, so it 
+24th one, so it 
 is the one with log-transformed V24
 
 Prediction for models with multiple regresors:
@@ -289,11 +297,11 @@ mRSE.multiple.vars$mRSE.test
 ```
 
 ```
-##  [1] 0.0019260952 0.0013737413 0.0011436523 0.0009808765 0.0010833703
-##  [6] 0.0010113920 0.0008142643 0.0007522201 0.0006770676 0.0006233087
-## [11] 0.0006037896 0.0006016469 0.0005302602 0.0005084240 0.0004754733
-## [16] 0.0004397268 0.0004253235 0.0004125675 0.0003528488 0.0003080058
-## [21] 0.0003165451 0.0002907199 0.0002926537 0.0002869839
+##  [1] 0.0068298057 0.0025615451 0.0019911602 0.0014003344 0.0012792466
+##  [6] 0.0012669012 0.0012092244 0.0010941569 0.0008991543 0.0009235673
+## [11] 0.0008641742 0.0007871492 0.0006727876 0.0006051535 0.0005535804
+## [16] 0.0005270796 0.0004935108 0.0004796801 0.0004554811 0.0003880751
+## [21] 0.0003494044 0.0003057818 0.0002718681 0.0002517738
 ```
 
 Model resulted in minimum mRSE was the 
@@ -306,10 +314,10 @@ mRSE.multiple.vars$RMSE.train
 ```
 
 ```
-##  [1] 0.50453122 0.36312877 0.26935132 0.23213247 0.20142993 0.17534373
-##  [7] 0.15932059 0.14201330 0.13148818 0.12355249 0.11473500 0.10282631
-## [13] 0.09653538 0.08972993 0.08021569 0.07655200 0.07497902 0.07446404
-## [19] 0.07182078 0.06711802 0.06154384 0.05830124 0.05565598 0.05176412
+##  [1] 0.41928326 0.34280709 0.25467486 0.22427517 0.19664600 0.16867020
+##  [7] 0.15034439 0.13481625 0.12624182 0.11643074 0.10869342 0.09819476
+## [13] 0.09313077 0.08754225 0.07847271 0.07467053 0.07356452 0.07311675
+## [19] 0.06968463 0.06544018 0.06063189 0.05782865 0.05582976 0.05223296
 ```
 
 Model resulted in minimum RMSE was the 
@@ -332,13 +340,13 @@ head(mRSE.compare) # checking the first 6 observations
 ```
 
 ```
-##   index        variable        value
-## 1     1 mRSE.single.var 0.0019260952
-## 2     2 mRSE.single.var 0.0013794946
-## 3     3 mRSE.single.var 0.0012000904
-## 4     4 mRSE.single.var 0.0010907072
-## 5     5 mRSE.single.var 0.0010055435
-## 6     6 mRSE.single.var 0.0009474114
+##   index        variable       value
+## 1     1 mRSE.single.var 0.006829806
+## 2     2 mRSE.single.var 0.002312475
+## 3     3 mRSE.single.var 0.001789100
+## 4     4 mRSE.single.var 0.001586330
+## 5     5 mRSE.single.var 0.001452293
+## 6     6 mRSE.single.var 0.001367363
 ```
 
 Adding labels for data for ggplot2:
@@ -352,13 +360,13 @@ head(mRSE.compare) # checking the first 6 observations
 ```
 
 ```
-##   index          variable        value
-## 1     1 Linear Regression 0.0019260952
-## 2     2 Linear Regression 0.0013794946
-## 3     3 Linear Regression 0.0012000904
-## 4     4 Linear Regression 0.0010907072
-## 5     5 Linear Regression 0.0010055435
-## 6     6 Linear Regression 0.0009474114
+##   index          variable       value
+## 1     1 Linear Regression 0.006829806
+## 2     2 Linear Regression 0.002312475
+## 3     3 Linear Regression 0.001789100
+## 4     4 Linear Regression 0.001586330
+## 5     5 Linear Regression 0.001452293
+## 6     6 Linear Regression 0.001367363
 ```
 
 Plot in ggplot2:
@@ -378,4 +386,4 @@ ggplot(mRSE.compare, aes(x = index, y = value, colour = variable)) +
   theme(legend.position = "bottom", legend.title=element_blank())
 ```
 
-![](README_files/figure-html/unnamed-chunk-23-1.png)<!-- -->
+<img src="README_files/figure-html/unnamed-chunk-23-1.png" style="display: block; margin: auto;" />
