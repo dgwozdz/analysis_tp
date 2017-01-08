@@ -67,8 +67,7 @@ Taking a closer look at the means for video views it can be seen that after 72 h
 on average a given videos has 62% (=743210/613303 - 1) more views than after 24 hours
 and 2 times more views after 168 hours. It can be also read that the increase in
 views between 3 and 7 days after publishing is on average at level ~20%
-(=743210/613303 - 1). Last but not least, more outliers were identified with the time
-passing from the sharing of videos.
+(=743210/613303 - 1).
 
 ### 1.2 Distribution of v(168)
 
