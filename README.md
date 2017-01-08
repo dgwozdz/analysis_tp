@@ -314,7 +314,7 @@ Model resulted in minimum RMSE was the
 24th one,
 therefore it also contained all log-transformed 24 variables.
 
-### 1.10 mRSE visualization----
+### 1.10 mRSE visualization
 
 Preparing data for ggplot2 - melting in order to plot multiple lines on one plot:
 
